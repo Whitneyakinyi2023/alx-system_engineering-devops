@@ -1,2 +1,2 @@
 #!/bin/bash
-$user_groups
+echo $user_groups
