@@ -1,2 +1,2 @@
 #!/bin/bash
-sed -i 's/A/Z  s/c/e
+tr "A" "Z" | tr "c" "e"
