@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#This bash script is used to list all files in current working directory
+for file in *; do
+	  if [[ ! "$file" == .* && -f "$file" ]]; then
+        new_name="${file#*-}"
+        echo "$new_name"
+    fi
+done
