@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#fizzbuzz
+
+for i in {1..100}; do
+  # Check for divisibility by 15 (multiple of both 3 and 5)
+  if [[ $((i % 15)) == 0 ]]; then
+    echo -e "FizzBuzz"
+  # Check for divisibility by 3
+  elif [[ $((i % 3)) == 0 ]]; then
+    echo -e "Fizz"
+  # Check for divisibility by 5
+  elif [[ $((i % 5)) == 0 ]]; then
+    echo -e "Buzz"
+  # Not a multiple of 3, 5, or 15, so print the number
+  else
+    echo -e "$i"
+  fi
+done
