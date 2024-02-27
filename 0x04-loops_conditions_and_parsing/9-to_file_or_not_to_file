@@ -1,4 +1,4 @@
-#!/usr/bin/ env bash
+#!/usr/bin/env bash
 #bash script to display [properties pf a file
 
 # Check if the file exists
