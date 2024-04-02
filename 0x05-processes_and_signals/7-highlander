@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Displays infinity and beyond to infinity
+infinity_and_beyond() {
+    echo "To infinity and beyond"
+}
+
+# Infinite loop
+while true;
+do
+infinity_and_beyond
+sleep 2
+trap 'echo "I am invincible!!!"' SIGTERM 
+done
