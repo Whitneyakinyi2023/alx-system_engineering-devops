@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-
-
+# Show your Bash PID
 # shellcheck disable=SC2009
-
-
 # This script displys the bash pid
-ps aux | grep bash | grep -v grep
+ps aux | grep bash
