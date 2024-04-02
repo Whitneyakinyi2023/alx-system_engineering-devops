@@ -1,0 +1,12 @@
+#!/bin/bash
+# Find the PID of the process
+PID=$(pgrep -f "4-to_infinity_and_beyond")
+
+# Check if the PID exists
+if [ -n "$PID" ]; then
+    echo "Stopping the process with PID: $PID"
+    # Send termination signal to the process
+    kill $PID
+else
+    echo "not named process running."
+fi
