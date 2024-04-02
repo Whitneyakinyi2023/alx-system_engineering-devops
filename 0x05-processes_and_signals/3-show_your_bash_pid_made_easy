@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# Get the PID of the current script
-current_pid=$$
-
+# Get the PID of the current script current_pid=$$
 # Iterate through the processes and filter those whose name contains "bash"
 for pid in /proc/*/; do
     pid=${pid%/}
