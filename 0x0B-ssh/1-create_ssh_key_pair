@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #Required key generation
 
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/school -N "betty"
+ssh-keygen -t rsa -b 4096 -P betty -f school
