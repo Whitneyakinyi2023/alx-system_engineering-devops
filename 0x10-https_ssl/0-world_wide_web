@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Function to query DNS record
+get_record() {
+  local domain="$1" subdomain="$2" record_type="A"
+  dig "$subdomain.$domain" +short -t "$record_type" | grep -v "^;"
+}
+to query DNS record
+get_record() {
+  local domain="$1" subdomain="$2" record_type="A"
+  dig "$subdomain.$domain" +short -t "$record_type" | grep -v "^;"
+}
+
+# Domain name (required)
+domain="$1"
+
+# Optional subdomain
+subdomain="$2"
+
+# Validate domain presence
+if [[ -z "$domain" ]]; then
+  echo "Error: Please provide a domain name."
+  exit 1
+fi
+
+# Check if specific subdomain provided
+if [[ -z "$subdomain" ]]; then
+  # Display information for specific subdomains (www, lb-01, web-01, web-02)
+  for subdomain in www lb-01 web-01 web-02; do
+    record=$(get_record "$domain" "$subdomain")
+    if [[ -n "$record" ]]; then
+      echo "The subdomain $subdomain is a A record and points to $record"
+    fi
+  done
+else
+  # Display information for the provided subdomain
+  record=$(get_record "$domain" "$subdomain")
+  if [[ -n "$record" ]]; then
+    echo "The subdomain $subdomain is a A record and points to $record"
+  else
+    echo "Subdomain $subdomain not found for $domain"
+  fi
+fi
