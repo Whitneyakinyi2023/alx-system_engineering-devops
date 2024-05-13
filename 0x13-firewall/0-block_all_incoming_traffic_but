@@ -1,7 +1,5 @@
-#!/bin/bash
-#Let’s install the ufw firewall and setup a few rules on web-01.
-sudo ufw default deny incoming  # Block all incoming traffic
-sudo ufw allow OpenSSH           # Allow SSH on port 22
-sudo ufw allow WWW               # Allow HTTP on port 80
-sudo ufw allow HTTPS             # Allow HTTPS on port 443
-sudo ufw enable                  # Enable ufw firewall
+sudo ufw default deny incoming
+sudo ufw allow OpenSSH  
+sudo ufw allow WWW    
+sudo ufw allow HTTPS
+sudo ufw enable 
