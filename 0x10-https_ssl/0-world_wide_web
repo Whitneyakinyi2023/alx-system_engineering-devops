@@ -4,11 +4,6 @@ get_record() {
   local domain="$1" subdomain="$2" record_type="A"
   dig "$subdomain.$domain" +short -t "$record_type" | grep -v "^;"
 }
-to query DNS record
-get_record() {
-  local domain="$1" subdomain="$2" record_type="A"
-  dig "$subdomain.$domain" +short -t "$record_type" | grep -v "^;"
-}
 
 # Domain name (required)
 domain="$1"
