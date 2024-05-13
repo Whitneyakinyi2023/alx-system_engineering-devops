@@ -1,2 +1,6 @@
-sed: can't read /etc/nginx/sites-enabled/default: No such file or directory
-restart: unrecognized service
+Error: 'listen 80 default_server;' is missing or misconfigured in /etc/nginx/sites-enabled/default
+Updating the configuration to bind port 80 to all IPv4 addresses...
+ERROR: problem running iptables: iptables v1.6.0: can't initialize iptables table `filter': Permission denied (you must be root)
+Perhaps iptables or your kernel needs to be upgraded.
+
+
