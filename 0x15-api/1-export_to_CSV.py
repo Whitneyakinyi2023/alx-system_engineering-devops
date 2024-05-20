@@ -70,14 +70,14 @@ def export_todo_data(employee_id):
     # Build and write CSV data
     filename = f"{employee_id}.csv"
     with open(filename, 'w', newline='') as csvfile:
-      writer = csv.writer(csvfile)
+      writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
       for todo in todos_data:
-        if todo['userId'] == employee_id:
+        if todo["userId"] == employee_id:
           writer.writerow([
-              todo['userId'],
+              todo["userId"],
               employee_username,
-              todo['completed'],
-              todo['title'],
+              todo["completed"],
+              todo["title"],
           ])
 
     print(f"Employee data exported to {filename}")
