@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
 """
-This Python script retrieves TODO data (JSON).
+This Python script retrieves TODO data for a specified employee ID from a sample API,
+processes it, and exports the employee's tasks (user_id, username, completed, title)
+to a JSON file.
 """
 
 from requests import get
@@ -45,7 +47,7 @@ def export_todo_data(employee_id):
         employee_id = int(employee_id)
 
         # Get TODO data
-        todos_url = 'https://jsonplaceholder.typicode.com/todos/'
+        todos_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
         todos_response = get(todos_url)
         if todos_response.status_code != 200:
             print(f"Error retrieving TODO data: {todos_response.status_code}")
@@ -53,33 +55,31 @@ def export_todo_data(employee_id):
         todos_data = todos_response.json()
 
         # Get user data
-        users_url = 'https://jsonplaceholder.typicode.com/users'
+        users_url = f'https://jsonplaceholder.typicode.com/users/{employee_id}'
         users_response = get(users_url)
         if users_response.status_code != 200:
             print(f"Error retrieving user data: {users_response.status_code}")
             return 1
-        users_data = users_response.json()
+        user_data = users_response.json()
 
         # Find employee username
-        employee_username = get_employee_username(employee_id, users_data)
+        employee_username = user_data['username']
         if not employee_username:
             print(f"Employee with ID {employee_id} not found.")
             return 1
 
         # Build and write JSON data
-        json_data = []
-        for todo in todos_data:
-            if todo['userId'] == employee_id:
-                json_data.append({
-                    'user_id': todo['userId'],
-                    'username': employee_username,
-                    'completed': todo['completed'],
-                    'title': todo['title'],
-                })
+        tasks = [{
+            'task': todo['title'],
+            'completed': todo['completed'],
+            'username': employee_username
+        } for todo in todos_data]
+
+        json_data = {str(employee_id): tasks}
 
         filename = f"{employee_id}.json"
         with open(filename, 'w') as jsonfile:
-            json.dump(json_data, jsonfile, indent=None)
+            json.dump(json_data, jsonfile, indent= None)
 
         print(f"Employee data exported to {filename}")
         return 0
