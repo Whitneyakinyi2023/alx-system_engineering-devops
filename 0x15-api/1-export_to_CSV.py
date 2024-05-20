@@ -2,22 +2,25 @@
 
 """
 This Python script retrieves TODO data (CSV)
+
 """
 
-import csv
 from requests import get
 from sys import argv
-
+import csv
 
 
 def get_employee_username(user_id, user_data):
   """
+  Finds the username for a given user ID from the provided user data.
+
   Args:
       user_id (int): The ID of the user to find the username for.
       user_data (list): A list of dictionaries representing user data.
+
   Returns:
-      str: The username of the user 
- """
+      str: The username of the user with the provided ID, or None if not found.
+  """
   for user in user_data:
     if user['id'] == user_id:
       return user['username']
@@ -35,7 +38,7 @@ def export_todo_data(employee_id):
       int: 0 on success, 1 on error.
   """
   try:
-    """Validation of input"""
+    # Validate user input
     if len(argv) != 2:
       print("Usage: python script.py <employee_id>")
       return 1
@@ -67,17 +70,15 @@ def export_todo_data(employee_id):
     # Build and write CSV data
     filename = f"{employee_id}.csv"
     with open(filename, 'w', newline='') as csvfile:
-      fieldnames = ['user_id', 'username', 'completed', 'title']
-      writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-      writer.writeheader()
+      writer = csv.writer(csvfile)
       for todo in todos_data:
         if todo['userId'] == employee_id:
-          writer.writerow({
-              'user_id': todo['userId'],
-              'username': employee_username,
-              'completed': todo['completed'],
-              'title': todo['title'],
-          })
+          writer.writerow([
+              todo['userId'],
+              employee_username,
+              todo['completed'],
+              todo['title'],
+          ])
 
     print(f"Employee data exported to {filename}")
     return 0
@@ -90,3 +91,4 @@ def export_todo_data(employee_id):
 if __name__ == "__main__":
   exit_code = export_todo_data(argv[1])
   exit(exit_code)
+
