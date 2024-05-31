@@ -1,11 +1,30 @@
 #Automated installatio n of flask and puppet
-exec { 'install_puppet-lint':
-  command => '/usr/bin/apt-get -y install puppet-lint=2.5.0',
-  unless  => 'dpkg -s puppet-lint | grep -q "Version: 2.5.0"',
+# Check the operatings system with a fact
+$os_family = $facts['osfamily']
+
+# Define a class for installing Flask
+class ::flask {
+
+  # Use package resource with appropriate name
+  package { 'python3-flask':
+    ensure => installed,
+  }
 }
 
-exec { 'install_flask':
-  command => '/usr/bin/apt-get -y install python3-flask=2.1.0',
-  unless  => 'dpkg -s python3-flask | grep -q "Version: 2.1.0"',
+# Define a class for installing Puppet (assuming yum for RedHat)
+if $os_family == 'RedHat' {
+  class ::puppet {
+    package { 'puppet':
+      ensure => installed,
+    }
+  }
+} else {
+  # Use apt for Debian-based systems
+  class ::puppet {
+    package { 'puppet-agent':
+      ensure => installed,
+    }
+  }
 }
+
 
