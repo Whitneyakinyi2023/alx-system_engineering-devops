@@ -1,7 +1,6 @@
-#!/usr/bin/pup
 # Automated installation of  puppet-lint -v 2.5.0
 
  package {'flask':
-  ensure   => '2.1.0',
-  provider => 'pip3'
-}
+    provider => 'pip3'
+    ensure   => '2.1.0',
+    }
