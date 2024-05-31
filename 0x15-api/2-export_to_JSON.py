@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 
 """
-This Python script retrieves TODO data for a specified employee ID from a sample API,
-processes it, and exports the employee's tasks (user_id, username, completed, title)
-to a JSON file.
+This Python script retrieves TODO data (JSON)
 """
 
 from requests import get
