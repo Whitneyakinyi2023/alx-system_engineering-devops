@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""importaation"""
+
 import requests
 import re
 import json
@@ -57,15 +60,4 @@ def count_words(subreddit, word_list, word_counts={}, after=None):
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
 
-
-if __name__ == '__main__':
-    import sys
-
-    if len(sys.argv) < 3:
-        print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
-        print("Ex: {} programming 'python java javascript'".format(sys.argv[0]))
-    else:
-        subreddit = sys.argv[1]
-        keyword_list = [x for x in sys.argv[2].split()]
-        count_words(subreddit, keyword_list)
 
