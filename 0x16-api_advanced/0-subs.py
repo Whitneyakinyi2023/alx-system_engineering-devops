@@ -1,47 +1,71 @@
-#!/usr/bin/python3
-"""
-API request for number of reddit subscribers
-"""
-
-import json
 import requests
-import sys
+import re
+import json
 
 
-def number_of_subscribers(subreddit):
-  """Queries the Reddit API to get the number of subscribers for a given subreddit.
+def count_words(subreddit, word_list, word_counts={}, after=None):
+    """
+    Recursively queries Reddit API to count occurrences of keywords in hot articles.
 
-  Args:
-      subreddit: The name of the subreddit to query (string).
+    Args:
+        subreddit (str): The name of the subreddit to query.
+        word_list (list): A list of keywords to search for (case-insensitive).
+        word_counts (dict, optional): A dictionary to store keyword counts. Defaults to {}.
+        after (str, optional): The 'after' parameter for pagination. Defaults to None.
 
-  Returns:
-      The number of subscribers for the subreddit (integer), or 0 if the subreddit
-      is invalid or an error occurs.
-  """
+    Returns:
+        None: The function doesn't return a value, it directly prints the results.
+    """
 
-  url = f"https://www.reddit.com/r/{subreddit}/about.json"
-  headers = {'User-Agent': 'My Reddit API Script 0.1'}  # Custom User-Agent
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
+    if after:
+        url += f"&after={after}"
 
-  try:
-    response = requests.get(url, allow_redirects=False, headers=headers)
-    response.raise_for_status()  # Raise an exception for non-200 status codes
+    headers = {'User-Agent': 'My Reddit API Script 0.1'}  # Custom User-Agent
 
-    data = response.json()
-    if 'data' in data and 'subscribers' in data['data']:
-      return data['data']['subscribers']
-    else:
-      return 0  # Invalid subreddit or unexpected response format
+    try:
+        response = requests.get(url, allow_redirects=False, headers=headers)
+        response.raise_for_status()
 
-  except requests.exceptions.RequestException as e:
-    print(f"Error: {e}")
-    return 0
+        data = response.json()
+
+        if 'data' in data and 'children' in data['data']:
+            for post in data['data']['children']:
+                title = post['data']['title'].lower()
+
+                # Preprocess title to remove trailing punctuation and spaces
+                title = re.sub(r"[^\w\s]", "", title).strip()
+
+                # Split title into words and iterate through word list
+                for word in title.split():
+                    # Normalize keyword (lowercase and remove punctuation)
+                    keyword = re.sub(r"[^\w]", "", word.lower())
+                    if keyword in word_list:
+                        word_counts[keyword] = word_counts.get(keyword, 0) + 1
+
+            # Check for next page and recurse if necessary
+            after = data['data'].get('after')
+            if after:
+                count_words(subreddit, word_list, word_counts.copy(), after)
+
+        # Print results only if there are any matches
+        if word_counts:
+            sorted_counts = sorted(word_counts.items(), key=lambda item: (-item[1], item[0]))
+            for keyword, count in sorted_counts:
+                print(f"{keyword}: {count}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+
 
 if __name__ == '__main__':
-  import sys
+    import sys
 
-  if len(sys.argv) < 2:
-    print("Please pass an argument for the subreddit to search.")
-  else:
-    subreddit = sys.argv[1]
-    subscribers = number_of_subscribers(subreddit)
-    print(subscribers)
+    if len(sys.argv) < 3:
+        print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
+        print("Ex: {} programming 'python java javascript'".format(sys.argv[0]))
+    else:
+        subreddit = sys.argv[1]
+        keyword_list = [x for x in sys.argv[2].split()]
+        count_words(subreddit, keyword_list)
+
