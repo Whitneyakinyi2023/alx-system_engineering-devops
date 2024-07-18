@@ -1,2 +1,3 @@
 #!/bin/bash
-paste d, - - | cut d,  fl
+# Print every other line starting with the first line
+awk 'NR % 2 == 1'
